@@ -55,6 +55,7 @@ def initialize_extensions(app: DifyApp):
         ext_proxy_fix,
         ext_redis,
         ext_request_logging,
+        ext_saml,
         ext_sentry,
         ext_set_secretkey,
         ext_storage,
@@ -66,6 +67,7 @@ def initialize_extensions(app: DifyApp):
         ext_timezone,
         ext_logging,
         ext_warnings,
+        ext_saml, # Add SAML extension here
         ext_import_modules,
         ext_set_secretkey,
         ext_compress,

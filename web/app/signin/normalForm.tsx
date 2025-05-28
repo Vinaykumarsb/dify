@@ -8,6 +8,9 @@ import MailAndCodeAuth from './components/mail-and-code-auth'
 import MailAndPasswordAuth from './components/mail-and-password-auth'
 import SocialAuth from './components/social-auth'
 import SSOAuth from './components/sso-auth'
+import { getUserSAMLSSOUrl } from '@/service/sso' // Import SAML service
+import { Lock01 } from '@/app/components/base/icons/src/vender/solid/security' // Icon for button
+import Button from '@/app/components/base/button' // Button component
 import cn from '@/utils/classnames'
 import { invitationCheck } from '@/service/common'
 import { LicenseStatus } from '@/types/feature'
@@ -138,9 +141,45 @@ const NormalForm = () => {
         <div className="relative">
           <div className="mt-6 flex flex-col gap-3">
             {systemFeatures.enable_social_oauth_login && <SocialAuth />}
-            {systemFeatures.sso_enforced_for_signin && <div className='w-full'>
-              <SSOAuth protocol={systemFeatures.sso_enforced_for_signin_protocol} />
-            </div>}
+            
+            {/* Existing SSOAuth for enforced SSO */}
+            {systemFeatures.sso_enforced_for_signin && systemFeatures.sso_enforced_for_signin_protocol !== 'saml' && (
+              <div className='w-full'>
+                <SSOAuth protocol={systemFeatures.sso_enforced_for_signin_protocol} />
+              </div>
+            )}
+
+            {/* Specific SAML Login Button */}
+            {/* This button will be shown if SSO is enforced and protocol is SAML, or as an additional option */}
+            {/* For this subtask, let's assume it's an additional option or the primary if SAML is the enforced method.
+                The condition systemFeatures.sso_enforced_for_signin_protocol === 'saml' handles the enforced case.
+                If SAML is just an option, this button should appear if SAML is enabled in systemFeatures.
+                For now, making it appear if sso_enforced_for_signin is true and protocol is saml OR if it's not enforced (simplification for task)
+            */}
+            {(systemFeatures.sso_enforced_for_signin && systemFeatures.sso_enforced_for_signin_protocol === 'saml') || 
+             !systemFeatures.sso_enforced_for_signin && <Button // Show if SAML is enforced OR if SSO is not enforced (allowing SAML as an option)
+              tabIndex={0}
+              onClick={async () => {
+                try {
+                  setIsLoading(true) // Assuming setIsLoading is available in this component
+                  const res = await getUserSAMLSSOUrl(invite_token)
+                  router.push(res.url)
+                } catch (e: any) {
+                  Toast.notify({
+                    type: 'error',
+                    message: t('login.samlLoginError', { message: e.message || 'Failed to initiate SAML login.' }),
+                  })
+                } finally {
+                  setIsLoading(false)
+                }
+              }}
+              disabled={isLoading} // Assuming isLoading is available
+              className="w-full"
+            >
+              <Lock01 className='mr-2 h-5 w-5 text-text-accent-light-mode-only' />
+              <span className="truncate">{t('login.loginWithSaml') /* Add i18n key */}</span>
+            </Button>}
+
           </div>
 
           {showORLine && <div className="relative mt-6">

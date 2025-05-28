@@ -98,6 +98,8 @@ const translation = {
   back: 'Back',
   noLoginMethod: 'Authentication method not configured',
   noLoginMethodTip: 'Please contact the system admin to add an authentication method.',
+  loginWithSaml: 'Login with SAML',
+  samlLoginError: 'SAML login failed: {{message}}',
   licenseExpired: 'License Expired',
   licenseExpiredTip: 'The Dify Enterprise license for your workspace has expired. Please contact your administrator to continue using Dify.',
   licenseLost: 'License Lost',

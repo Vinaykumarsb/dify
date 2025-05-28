@@ -12,6 +12,7 @@ def init_app(app: DifyApp):
     from controllers.inner_api import bp as inner_api_bp
     from controllers.service_api import bp as service_api_bp
     from controllers.web import bp as web_bp
+    from controllers.enterprise.sso.saml.routes import saml_sso_bp, enterprise_saml_sso_bp # Import SAML blueprints
 
     CORS(
         service_api_bp,
@@ -46,3 +47,9 @@ def init_app(app: DifyApp):
     app.register_blueprint(files_bp)
 
     app.register_blueprint(inner_api_bp)
+
+    # Register SAML SSO blueprints
+    # These do not need CORS for server-to-server communication (IdP to SP)
+    # or browser redirects.
+    app.register_blueprint(saml_sso_bp)
+    app.register_blueprint(enterprise_saml_sso_bp)
