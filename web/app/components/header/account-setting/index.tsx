@@ -16,9 +16,12 @@ import {
   RiPuzzle2Fill,
   RiPuzzle2Line,
   RiTranslate2,
+  RiKeyLine, // Added for AD Config
+  RiKeyFill, // Added for AD Config
 } from '@remixicon/react'
 import Button from '../../base/button'
 import MembersPage from './members-page'
+import ADConfigPage from './ad-config-page' // Import ADConfigPage
 import LanguagePage from './language-page'
 import ApiBasedExtensionPage from './api-based-extension-page'
 import DataSourcePage from './data-source-page'
@@ -99,6 +102,12 @@ export default function AccountSetting({
         name: t('custom.custom'),
         icon: <RiColorFilterLine className={iconClassName} />,
         activeIcon: <RiColorFilterFill className={iconClassName} />,
+      },
+      {
+        key: 'ad-config', // New item key
+        name: t('common.settings.adConfig'), // New translation key
+        icon: <RiKeyLine className={iconClassName} />,
+        activeIcon: <RiKeyFill className={iconClassName} />,
       },
     ].filter(item => !!item.key) as GroupItem[]
   })()
@@ -220,6 +229,7 @@ export default function AccountSetting({
               {activeMenu === 'api-based-extension' && <ApiBasedExtensionPage />}
               {activeMenu === 'custom' && <CustomPage />}
               {activeMenu === 'language' && <LanguagePage />}
+              {activeMenu === 'ad-config' && <ADConfigPage />}
             </div>
           </div>
         </div>

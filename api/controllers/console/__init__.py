@@ -43,7 +43,7 @@ api.add_resource(AppImportConfirmApi, "/apps/imports/<string:import_id>/confirm"
 api.add_resource(AppImportCheckDependenciesApi, "/apps/imports/<string:app_id>/check-dependencies")
 
 # Import other controllers
-from . import admin, apikey, extension, feature, ping, setup, version
+from . import admin, apikey, extension, feature, ping, setup, version, ad_admin_controller
 
 # Import app controllers
 from .app import (
@@ -180,3 +180,7 @@ from .workspace import (
     tool_providers,
     workspace,
 )
+
+# AD Admin Configuration
+api.add_resource(ad_admin_controller.ADConfigurationResource, "/admin/ad/configuration")
+api.add_resource(ad_admin_controller.ADTestConnectionResource, "/admin/ad/test-connection")

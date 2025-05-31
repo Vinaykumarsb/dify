@@ -98,6 +98,7 @@ class Account(UserMixin, Base):
     last_active_at = db.Column(db.DateTime, nullable=False, server_default=func.current_timestamp())
     status = db.Column(db.String(16), nullable=False, server_default=db.text("'active'::character varying"))
     initialized_at = db.Column(db.DateTime)
+    ad_user_dn = db.Column(db.String(255), nullable=True, index=True, comment='Active Directory User Distinguished Name')
     created_at = db.Column(db.DateTime, nullable=False, server_default=func.current_timestamp())
     updated_at = db.Column(db.DateTime, nullable=False, server_default=func.current_timestamp())
 

@@ -8,6 +8,7 @@ from .account import (
     TenantAccountRole,
     TenantStatus,
 )
+from .ad import ADConfiguration
 from .api_based_extension import APIBasedExtension, APIBasedExtensionPoint
 from .dataset import (
     AppDatasetJoin,
@@ -95,6 +96,7 @@ from .workflow import (
 __all__ = [
     "APIBasedExtension",
     "APIBasedExtensionPoint",
+    "ADConfiguration",
     "Account",
     "AccountIntegrate",
     "AccountStatus",
