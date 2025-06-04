@@ -1,0 +1,25 @@
+# Base DN for the domain
+dn: dc=example,dc=com
+objectClass: top
+objectClass: domain
+dc: example
+
+# Organizational Unit for Users
+dn: ou=users,dc=example,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: users
+
+# Sample User: testuser
+dn: uid=testuser,ou=users,dc=example,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: testuser
+cn: Test User
+sn: User
+givenName: Test
+displayName: Test User Dify
+mail: testuser@example.com
+userPassword: password

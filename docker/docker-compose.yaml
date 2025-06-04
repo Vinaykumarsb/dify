@@ -1178,6 +1178,38 @@ services:
     volumes:
       - ./volumes/unstructured:/app/data
 
+  openldap:
+    image: osixia/openldap:1.5.0
+    container_name: dify_openldap
+    restart: always
+    ports:
+      - "${OPENLDAP_HOST_PORT:-10389}:389"
+      - "${OPENLDAP_HOST_LDAPS_PORT:-10636}:636"
+    environment:
+      LDAP_ORGANISATION: "${OPENLDAP_ORGANISATION:-Dify Example Inc.}"
+      LDAP_DOMAIN: "${OPENLDAP_DOMAIN:-example.com}"
+      LDAP_ADMIN_PASSWORD: "${OPENLDAP_ADMIN_PASSWORD:-adminpassword}"
+      LDAP_CONFIG_PASSWORD: "${OPENLDAP_CONFIG_PASSWORD:-configpassword}"
+      LDAP_READONLY_USER: "true" # Creates cn=readonly,dc=example,dc=com
+      LDAP_READONLY_USER_PASSWORD: "${OPENLDAP_READONLY_USER_PASSWORD:-readonlypassword}"
+      LDAP_TLS_VERIFY_CLIENT: "never" # try is better, but never for easiest start
+      LDAP_TLS_ENFORCE: "false"
+      LDAP_TLS_CIPHER_SUITE: "NORMAL"
+      LDAP_TLS_PROTOCOL_MIN: "3.3"
+      # KEEP_EXISTING_CONFIG: "true"
+    volumes:
+      - ./volumes/openldap/data:/var/lib/ldap # For data persistence
+      - ./volumes/openldap/slapd.d:/etc/ldap/slapd.d # For config persistence
+      - ./openldap/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/01-bootstrap.ldif
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD-SHELL", "ldapsearch -x -H ldap://localhost:389 -b dc=$$(echo $${LDAP_DOMAIN:-example.com} | sed 's/\./,dc=/g') -s base '(objectClass=*)' > /dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
 networks:
   # create a network between sandbox, api and ssrf_proxy, and can not access outside.
   ssrf_proxy_network:
